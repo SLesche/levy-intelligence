@@ -1,2 +1,6 @@
 data/
 .Rproj.user
+
+bayesflow/
+
+.vscode
