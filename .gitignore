@@ -2,5 +2,8 @@ data/
 .Rproj.user
 
 bayesflow/
+checkpoints/
 
 .vscode
+
+training_data*.obj
