@@ -4,21 +4,48 @@ posner_data <- haven::read_sav("./data/Posner_RawData_0503.sav")
 hick_data <- haven::read_sav("./data/Hick_RawData_1901.sav")
 sternberg_data <- haven::read_sav("./data/Sternberg_RawData_1901.sav")
 
+is_outlier <- function(vector){
+  mean = mean(vector, na.rm = TRUE)
+  sd = sd(vector, na.rm = TRUE)
+  
+  is_outlier = (vector < mean - 3*sd) | (vector > mean + 3*sd)
+  return(is_outlier)
+}
+
 posner_data_clean <- posner_data %>% 
-  filter(RT < 5)
+  group_by(Subject, condNEW) %>% 
+  mutate(is_outlier = is_outlier(RT)) %>% 
+  filter(is_outlier == 0) %>% 
+  select(
+    subject = Subject,
+    condition = condNEW,
+    resp = Accuracy,
+    rt = RT
+  )
 
-posner_data_clean %>% pull(RTms) %>% hist(breaks = 100)
+hick_data_clean <- hick_data %>% 
+  group_by(Subject, condNEW) %>% 
+  mutate(is_outlier = is_outlier(RT)) %>% 
+  filter(is_outlier == 0) %>% 
+  select(
+    subject = Subject,
+    condition = condNEW,
+    resp = Accuracy,
+    rt = RT
+  )
 
-posner_ni <- posner_data_clean %>% 
-  filter(condNEW == 2)
+sternberg_data_clean <- sternberg_data %>% 
+  group_by(Subject, condNEW) %>% 
+  mutate(is_outlier = is_outlier(RT)) %>% 
+  filter(is_outlier == 0) %>% 
+  select(
+    subject = Subject,
+    condition = condNEW,
+    resp = Accuracy,
+    rt = RT
+  )
 
-few_trials <- posner_ni %>% 
-  count(Subject) %>% 
-  filter(n < 275) %>% 
-  pull(Subject)
 
-posner_ni <- posner_ni %>% 
-  filter(Subject != few_trials)
 
 # Need to save per participant with sub, cond, response, rt,
 levy_data <- posner_ni %>% 
