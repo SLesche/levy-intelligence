@@ -59,17 +59,15 @@ def LF_prior():
     
     The function returns a np array with all parameter values
     """
-    a_pi   = RNG.gamma(3, 1/3) + 0.1
-    a_ni   = RNG.gamma(3, 1/3) + 0.1
-    v_pi   = RNG.normal(3, 3)
-    v_ni   = RNG.normal(3, 3)
+    a      = RNG.gamma(3, 1/3) + 0.1
+    v      = RNG.normal(3, 3)
     t0     = RNG.gamma(1, 1/6) + 0.1
     st0    = RNG.beta(1,2) * 2*t0
     alpha  = RNG.beta (6, 2) * 2
 
-    return np.array([a_pi, a_ni, v_pi, v_ni, t0, st0, alpha]).astype(np.float32)
+    return np.array([a, v, t0, st0, alpha]).astype(np.float32)
 
-PARAM_NAMES = ['a_pi', 'a_ni', 'v_pi', 'v_ni', 't', 'st', 'alpha']
+PARAM_NAMES = ['a', 'v', 't', 'st', 'alpha']
 
 prior = bf.simulation.Prior(prior_fun=LF_prior, param_names=PARAM_NAMES)
 
@@ -84,14 +82,14 @@ def LF_experiment(theta, n_obs=500):
     """
     sim_data = np.zeros([n_obs,2])
     cnd = np.random.randint(0,2,n_obs)
-    sim_data[:,0] = cnd
+    sim_data[:,0] = np.zeros(n_obs)
     for i in range(n_obs):
         sim_data[i,1] = simulate_levy_trial(
-                            a = theta[0 + cnd[i]], 
+                            a = theta[0], 
                             z = 0.5,
-                            v = theta[2 + cnd[i]], # for a 3 condition experiment, this needs 3
-                            t = np.random.uniform(theta[4] - theta[5]/2, theta[4] + theta[5]/2), 
-                            alpha = theta[6]
+                            v = theta[1], # for a 3 condition experiment, this needs 3
+                            t = np.random.uniform(theta[2] - theta[3]/2, theta[2] + theta[3]/2), 
+                            alpha = theta[4]
                         )   
     return sim_data.astype(np.float32)
 
@@ -118,7 +116,7 @@ prior_means = np.round(prior_means, decimals=1)
 prior_stds = np.round(prior_stds, decimals=1)
 print(prior_means, prior_stds)
 
-def configurator(forward_dict, min_trials=570, max_trials=600):
+def configurator(forward_dict, min_trials=90, max_trials=100):
     """Configure the output of the GenerativeModel for a BayesFlow setup."""
 
     # Prepare placeholder dict
@@ -151,5 +149,5 @@ trainer = bf.trainers.Trainer(
     amortizer=amortizer, 
     configurator=configurator,
     default_lr=0.00005,
-    checkpoint_path="checkpoints//posner"
+    checkpoint_path="checkpoints//sternberg"
 )

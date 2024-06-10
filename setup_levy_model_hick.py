@@ -116,7 +116,7 @@ prior_means = np.round(prior_means, decimals=1)
 prior_stds = np.round(prior_stds, decimals=1)
 print(prior_means, prior_stds)
 
-def configurator(forward_dict, min_trials=275, max_trials=300):
+def configurator(forward_dict, min_trials=190, max_trials=200):
     """Configure the output of the GenerativeModel for a BayesFlow setup."""
 
     # Prepare placeholder dict
