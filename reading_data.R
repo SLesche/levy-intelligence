@@ -21,7 +21,8 @@ posner_data_clean <- posner_data %>%
     condition = condNEW,
     resp = Accuracy,
     rt = RT
-  )
+  ) %>% 
+  ungroup()
 
 hick_data_clean <- hick_data %>% 
   group_by(Subject, condNEW) %>% 
@@ -32,7 +33,8 @@ hick_data_clean <- hick_data %>%
     condition = condNEW,
     resp = Accuracy,
     rt = RT
-  )
+  ) %>% 
+  ungroup()
 
 sternberg_data_clean <- sternberg_data %>% 
   group_by(Subject, condNEW) %>% 
@@ -43,7 +45,8 @@ sternberg_data_clean <- sternberg_data %>%
     condition = condNEW,
     resp = Accuracy,
     rt = RT
-  )
+  ) %>% 
+  ungroup()
 
 
 
