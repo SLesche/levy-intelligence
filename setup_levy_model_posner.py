@@ -73,7 +73,7 @@ PARAM_NAMES = ['a_pi', 'a_ni', 'v_pi', 'v_ni', 't', 'st', 'alpha']
 
 prior = bf.simulation.Prior(prior_fun=LF_prior, param_names=PARAM_NAMES)
 
-def LF_experiment(theta, n_obs=500):
+def LF_experiment(theta, n_obs=600):
     """
     Simulates response times for one participant of a lévy-flight experiment.
      * param theta: numpy array with the parameters of the lfm (a,z,v1,v2,t,st,alpha) 
