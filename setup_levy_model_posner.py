@@ -103,7 +103,6 @@ summary_net = bf.networks.SetTransformer(input_dim=2,
                                              dense_settings = {'units': 256, 'activation': 'relu'},
                                          num_dense_fc = 3,
                                          name="lfm_summary")
-# summary_net = bf.networks.SetTransformer(input_dim=2, summary_dim=14, name="lfm_summary")
 
 inference_net = bf.networks.InvertibleNetwork(
     num_params=len(prior.param_names),
@@ -127,7 +126,7 @@ def configurator(forward_dict, min_trials=570, max_trials=600):
 
     # Extract simulated response times
     data = forward_dict["sim_data"]
-    num_trials = np.random.randint(min_trials, max_trials)
+    num_trials = np.random.randint(min_trials, max_trials + 1)
     idx = np.random.choice(range(data.shape[1]), size=num_trials, replace=False)
     data = data[:, idx, :]
 
