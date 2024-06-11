@@ -124,7 +124,7 @@ def configurator(forward_dict, min_trials=190, max_trials=200):
 
     # Extract simulated response times
     data = forward_dict["sim_data"]
-    num_trials = np.random.randint(min_trials, max_trials + 1)
+    num_trials = np.random.randint(min_trials, max_trials)
     idx = np.random.choice(range(data.shape[1]), size=num_trials, replace=False)
     data = data[:, idx, :]
 
