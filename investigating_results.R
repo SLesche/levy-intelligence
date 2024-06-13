@@ -12,6 +12,8 @@ data <- intelligence_results %>%
   mutate_all(as.numeric)
 
 
-cor(data$PS, data$alpha, use = "pairwise.complete.obs")
+cor(data$PS, data$t, use = "pairwise.complete.obs")
 
-hist(data$alpha, breaks = 100)
+hist(data$t, breaks = 40)
+
+cor(data$v_ni, data$alpha)
