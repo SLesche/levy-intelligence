@@ -11,9 +11,14 @@ data <- intelligence_results %>%
   left_join(., model_results) %>% 
   mutate_all(as.numeric)
 
+params <- c("a_ni", "a_pi", "v_ni", "v_pi", "t", "st", "alpha")
 
-cor(data$PS, data$t, use = "pairwise.complete.obs")
+intelligence <- c("APModd", "APMeven", "PS", "PC", "M", "C")
+cor(data[, intelligence], data[, params], use = "pairwise.complete.obs")
 
-hist(data$t, breaks = 40)
+hist(data$alpha, breaks = 40)
 
+hist(data$PC)
 cor(data$v_ni, data$alpha)
+
+plot(data$v_pi, data$APMeven)
