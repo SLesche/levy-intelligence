@@ -22,6 +22,7 @@ posner_data_clean <- posner_data %>%
     resp = Accuracy,
     rt = RT
   ) %>% 
+  mutate(condition = condition -1) %>% 
   ungroup()
 
 hick_data_clean <- hick_data %>% 
@@ -51,22 +52,11 @@ sternberg_data_clean <- sternberg_data %>%
 
 
 # Need to save per participant with sub, cond, response, rt,
-levy_data <- posner_ni %>% 
-  select(
-    subject = Subject,
-    condition = condNEW,
-    resp = Accuracy,
-    rt = RTms
-  )
 
-filepath <- "./data/levy_data/posner/posner_ni_data_subject"
-
-levy_data %>%
+filepath <- "./data/levy_data/posner/posner_data_subject_"
+posner_data_clean %>%
   group_by(subject) %>%
   tidyr::nest() %>%
   mutate(filename = paste0(filepath, subject, ".csv")) %>%
   purrr::pwalk(~write.csv(..2, file = ..3, row.names = FALSE))
 
-true_rt = posner_ni$RT
-
-hist(true_rt, breaks = 100, xlim = c(0, 5))
