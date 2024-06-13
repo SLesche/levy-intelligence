@@ -3,6 +3,7 @@
 bayesflow/
 checkpoints/
 posner_data*.csv
+sternberg_data*.csv
 
 .vscode
 *.sav

@@ -53,10 +53,17 @@ sternberg_data_clean <- sternberg_data %>%
 
 # Need to save per participant with sub, cond, response, rt,
 
-filepath <- "./data/levy_data/posner/posner_data_subject_"
+filepath_posner <- "./data/levy_data/posner/posner_data_subject_"
 posner_data_clean %>%
   group_by(subject) %>%
   tidyr::nest() %>%
-  mutate(filename = paste0(filepath, subject, ".csv")) %>%
+  mutate(filename = paste0(filepath_posner, subject, ".csv")) %>%
   purrr::pwalk(~write.csv(..2, file = ..3, row.names = FALSE))
+
+filepath_sternberg <- "./data/levy_data/sternberg/"
+sternberg_data_clean %>%
+  group_by(subject, condition) %>%
+  tidyr::nest() %>%
+  mutate(filename = paste0(filepath_sternberg, paste0("condition_"), condition, "/sternberg_data_subject_", subject, ".csv")) %>%
+  purrr::pwalk(~write.csv(..3, file = ..4, row.names = FALSE))
 
