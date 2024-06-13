@@ -16,7 +16,7 @@ params <- c("a_ni", "a_pi", "v_ni", "v_pi", "t", "st", "alpha")
 intelligence <- c("APModd", "APMeven", "PS", "PC", "M", "C")
 cor(data[, intelligence], data[, params], use = "pairwise.complete.obs")
 
-hist(data$alpha, breaks = 40)
+hist(data$st, breaks = 40)
 
 hist(data$PC)
 cor(data$v_ni, data$alpha)
