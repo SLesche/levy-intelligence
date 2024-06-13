@@ -1,9 +1,10 @@
-data/
 .Rproj.user
 
 bayesflow/
 checkpoints/
+posner_data*.csv
 
 .vscode
+*.sav
 
 training_data*.obj
