@@ -26,6 +26,37 @@ nested_data <- data %>%
     cors = map(data, get_correlation)
   )
 
-nested_data$cors[[8]]
+results <- data.frame()
+
+for (irow in 1:nrow(nested_data)){
+  df = as.data.frame(nested_data$cors[[irow]])
+  
+  df$task = nested_data$task[irow]
+  df$condition = nested_data$condition[irow]
+  
+  results = rbind(results, df)
+}
 
 
+results <- results %>% 
+  mutate(
+    measure = rownames(.)
+  ) %>% 
+  pivot_longer(
+    cols = c("a", "v", "t", "st", "alpha"),
+    names_to = "param",
+    values_to = "cor"
+  )
+
+results %>% 
+  ggplot(
+    aes(
+      x = cor,
+      fill = param,
+    )
+  )+
+  geom_boxplot()+
+  theme_classic()
+
+
+hist(data$alpha)
