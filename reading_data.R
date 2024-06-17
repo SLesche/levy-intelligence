@@ -22,7 +22,8 @@ posner_data_clean <- posner_data %>%
     resp = Accuracy,
     rt = RT
   ) %>% 
-  mutate(condition = condition -1) %>% 
+  mutate(condition = ifelse(condition == 1, "pi", "ni"),
+         task = "posner") %>% 
   ungroup()
 
 hick_data_clean <- hick_data %>% 
@@ -34,6 +35,14 @@ hick_data_clean <- hick_data %>%
     condition = condNEW,
     resp = Accuracy,
     rt = RT
+  ) %>% 
+  mutate(
+    condition = case_when(
+      condition == 1 ~ "0bit",
+      condition == 2 ~ "1bit",
+      condition == 3 ~ "2bit"
+    ),
+    task = "hick"
   ) %>% 
   ungroup()
 
@@ -47,23 +56,26 @@ sternberg_data_clean <- sternberg_data %>%
     resp = Accuracy,
     rt = RT
   ) %>% 
+  mutate(
+    condition = case_when(
+      condition == 1 ~ "s1",
+      condition == 2 ~ "s3",
+      condition == 3 ~ "s5"
+    ),
+    task = "sternberg"
+  ) %>% 
   ungroup()
 
 
 
 # Need to save per participant with sub, cond, response, rt,
+filepath <- "./data/levy_data/" 
 
-filepath_posner <- "./data/levy_data/posner/posner_data_subject_"
-posner_data_clean %>%
-  group_by(subject) %>%
-  tidyr::nest() %>%
-  mutate(filename = paste0(filepath_posner, subject, ".csv")) %>%
-  purrr::pwalk(~write.csv(..2, file = ..3, row.names = FALSE))
+full_data_clean <- rbind(posner_data_clean, sternberg_data_clean, hick_data_clean)
 
-filepath_sternberg <- "./data/levy_data/sternberg/"
-sternberg_data_clean %>%
-  group_by(subject, condition) %>%
+full_data_clean %>%
+  group_by(task, subject, condition) %>%
   tidyr::nest() %>%
-  mutate(filename = paste0(filepath_sternberg, paste0("condition_"), condition, "/sternberg_data_subject_", subject, ".csv")) %>%
-  purrr::pwalk(~write.csv(..3, file = ..4, row.names = FALSE))
+  mutate(filename = paste0(filepath, task, "/condition_", condition, "/", task, "_data_subject", subject, ".csv")) %>%
+  purrr::pwalk(~write.csv(..4, file = ..5, row.names = FALSE))
 
