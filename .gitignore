@@ -6,6 +6,8 @@ posner_data*.csv
 sternberg_data*.csv
 hick_data*.csv
 
+data/cognitive_control/raw_data/
+
 .vscode
 *.sav
 
