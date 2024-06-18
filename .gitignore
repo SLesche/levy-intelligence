@@ -10,5 +10,6 @@ data/cognitive_control/raw_data/
 
 .vscode
 *.sav
+*.db
 
 training_data*.obj
