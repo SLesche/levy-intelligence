@@ -40,7 +40,7 @@ posner_vars <- get_names(names(wide_model), "posner")
 hick_vars <- get_names(names(wide_model), "hick")
 
 psych::fa.parallel(
-  data[, t_vars],
+  data[, intelligence],
   fa = "fa",
   fm = "ml"
 )
@@ -133,7 +133,17 @@ base_model <- glue(
   "
 )
 
-base_model <- glue(
+base_model_alpha <- glue(
+  "
+  {g_factor}
+  
+  {alpha_factor}
+  
+  g ~~ alpha
+  "
+)
+
+base_model_v <- glue(
   "
   {g_factor}
   
@@ -142,8 +152,7 @@ base_model <- glue(
   g ~~ v
   "
 )
-
-test <- sem(model = base_model, data=data, std.ov =TRUE, estimator = "ML",missing="fiml")
+test <- sem(model = base_model_alpha, data=data, std.ov =TRUE, estimator = "ML",missing="fiml")
 summary(test, fit.measures = TRUE, standardized = TRUE)
 
 graph_sem(test)

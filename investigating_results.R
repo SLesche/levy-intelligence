@@ -11,8 +11,11 @@ data <- model_results %>%
   left_join(., intelligence_results) %>%
   mutate(across(-c(task, sub, condition), as.numeric))
 
+data$APM = data$APMeven + data$APModd
+
 params <- c("a", "v", "t", "st", "alpha")
-intelligence <- c("APModd", "APMeven", "PS", "PC", "M", "C")
+# intelligence <- c("APM")
+intelligence <- c("APM", "PS", "PC", "M", "C")
 
 get_correlation <- function(data){
   cors = cor(data[, intelligence], data[, params], use = "pairwise.complete.obs")
@@ -42,6 +45,9 @@ results <- results %>%
   mutate(
     measure = rownames(.)
   ) %>% 
+  mutate(
+    measure = str_remove(measure, "\\d+$")
+  ) %>% 
   pivot_longer(
     cols = c("a", "v", "t", "st", "alpha"),
     names_to = "param",
@@ -51,12 +57,15 @@ results <- results %>%
 results %>% 
   ggplot(
     aes(
-      x = cor,
+      x = param,
+      y = cor,
       fill = param,
     )
   )+
+  facet_wrap(~measure)+
   geom_boxplot()+
-  theme_classic()
+  theme_classic()+
+  geom_hline(yintercept = 0, color = "red")
 
 
 hist(data$alpha)
