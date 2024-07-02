@@ -22,11 +22,21 @@ get_correlation <- function(data){
   return(cors)
 }
 
+run_lm <- function(data){
+  data = data %>% 
+    mutate(
+      across(c(a, t, v, st, alpha), ~scale(.)[, 1])
+    )
+  lm = lm(APM ~ a + t + v + st + alpha, data = data)
+  return(lm)
+}
+
 nested_data <- data %>% 
   group_by(task, condition) %>% 
   nest() %>% 
   mutate(
-    cors = map(data, get_correlation)
+    cors = map(data, get_correlation),
+    lm = map(data, run_lm)
   )
 
 results <- data.frame()
@@ -55,6 +65,7 @@ results <- results %>%
   )
 
 results %>% 
+  filter(measure == "APM") %>% 
   ggplot(
     aes(
       x = param,
@@ -62,10 +73,9 @@ results %>%
       fill = param,
     )
   )+
-  facet_wrap(~measure)+
+  facet_wrap(~task)+
   geom_boxplot()+
   theme_classic()+
   geom_hline(yintercept = 0, color = "red")
-
 
 hist(data$alpha)

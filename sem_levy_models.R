@@ -28,7 +28,10 @@ intelligence_results <- read.csv2("data/iq_data/ERPData.csv")
 
 data <- wide_model %>%
   left_join(., intelligence_results) %>%
-  mutate(across(everything(), as.numeric))
+  mutate(across(everything(), as.numeric)) %>% 
+  mutate(APM = APMeven + APModd) %>% 
+  mutate(across(everything(), ~scale(.)[, 1]))
+
 
 a_vars <- get_names(names(wide_model), "^a_")
 v_vars <- get_names(names(wide_model), "^v_")
@@ -45,114 +48,61 @@ psych::fa.parallel(
   fm = "ml"
 )
 
-# Construct measurement models using glue
-a_factor <- glue::glue("
-  # Boundary Separation Model
-  a =~ {paste(a_vars, collapse = ' + ')}
-")
+g_factor <- "
+  # Intelligence measurement model
+  bis =~ PC + PS + M + C
+  apm =~ 1*APMeven + 1*APModd
+  
+  g =~ 1*bis + 1*apm
+"
 
-v_factor <- glue::glue("
-  # Drift Rate Model
-  v =~ {paste(v_vars, collapse = ' + ')}
-")
+true_g_factor <- "
+g=~ PC + PS + C + M + APM"
 
-t_factor <- glue::glue("
-  # non-decision time Model
-  t =~ {paste(t_vars, collapse = ' + ')}
-")
+cor(data[, intelligence], use = "pairwise.complete.obs")
 
-st_factor <- glue::glue("
-  # sd of non-decision time Model
-  st =~ {paste(st_vars, collapse = ' + ')}
-")
+intelligence_model <- sem(model = true_g_factor, data = data, estimator = "ML")
+summary(intelligence_model, fit.measures = TRUE, standardized = TRUE)
 
 alpha_factor <- glue::glue("
   # non-decision time Model
   alpha =~ {paste(alpha_vars, collapse = ' + ')}
+  alpha_sternberg_s1 ~~ s*alpha_sternberg_s1
+  alpha_sternberg_s3 ~~ s*alpha_sternberg_s3
+  alpha_sternberg_s5 ~~ s*alpha_sternberg_s5
+  alpha_hick_0bit ~~ h*alpha_hick_0bit
+  alpha_hick_1bit ~~ h*alpha_hick_1bit
+  alpha_hick_2bit ~~ h*alpha_hick_2bit
+  alpha_posner_ni ~~ p*alpha_posner_ni
+  alpha_posner_pi ~~ p*alpha_posner_pi
+
+  sternberg =~ alpha_sternberg_s1 + alpha_sternberg_s3 + alpha_sternberg_s5
+  hick =~ alpha_hick_0bit + alpha_hick_1bit + alpha_hick_2bit
+
+  posner =~ 1*alpha_posner_ni + 1*alpha_posner_pi
+  
+  hick ~~ 0*alpha
+  posner ~~ 0*alpha 
+  sternberg ~~ 0*alpha
 ")
 
-sternberg_factor <- glue(
+combined_model <- glue::glue(
   "
-  # Measurement factor for sternberg
-  sternberg =~ {paste(sternberg_vars, collapse = ' + ')}
-  "
-)
-
-hick_factor <- glue(
-  "
-  # Measurement factor for hick
-  hick =~ {paste(hick_vars, collapse = ' + ')}
-  "
-)
-
-posner_factor <- glue(
-  "
-  # Measurement factor for posner
-  posner =~ {paste(posner_vars, collapse = ' + ')}
-  "
-)
-
-g_factor <- "
-  # Intelligence measurement model
-  bis =~ PS + PC + M + C
-  apm =~ APMeven + APModd
-  
-  g =~ bis + apm
-"
-
-
-# Construction model
-base_model <- glue(
-  "
-  {g_factor}
-  
-  {v_factor}
-  
-  {a_factor}
-  
-  {t_factor}
-  
-  {st_factor}
-  
   {alpha_factor}
   
-  {sternberg_factor}
-  
-  {posner_factor}
-  
-  {hick_factor}
-  
-  g ~~ 0*sternberg + 0*hick + 0*posner
-  a ~~ 0*sternberg + 0*hick + 0*posner
-  t ~~ 0*sternberg + 0*hick + 0*posner
-  v ~~ 0*sternberg + 0*hick + 0*posner
-  st ~~ 0*sternberg + 0*hick + 0*posner
-  alpha ~~ 0*sternberg + 0*hick + 0*posner
-  
-  g ~~ alpha + v + t
-  "
-)
-
-base_model_alpha <- glue(
-  "
-  {g_factor}
-  
-  {alpha_factor}
+  {true_g_factor}
   
   g ~~ alpha
+  
+  g ~~ 0*hick + 0*sternberg + 0*posner
   "
 )
 
-base_model_v <- glue(
-  "
-  {g_factor}
-  
-  {v_factor}
-  
-  g ~~ v
-  "
-)
-test <- sem(model = base_model_alpha, data=data, std.ov =TRUE, estimator = "ML",missing="fiml")
+
+alpha_model <- sem(alpha_factor, data = data, std.ov = TRUE, estimator = "GLS")
+summary(alpha_model, fit.measures = TRUE, standardized = TRUE)
+
+test <- sem(model = combined_model, data=data, std.ov =TRUE, estimator = "GLS")
 summary(test, fit.measures = TRUE, standardized = TRUE)
 
-graph_sem(test)
+graph_sem(alpha_model)
