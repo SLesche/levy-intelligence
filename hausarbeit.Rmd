@@ -106,14 +106,47 @@ knitr::dep_auto()
 
 <!-- Here we can incorporate child markdown-documents as the separate parts -->
 # Introduction
-This part is the introduction, talk about mental speed and intelligence. Efficient vs. inefficient jumping.
+- Intelligence and mental speed
+
+- but what parts of mental speed? Variability aswell?
+
+- DDM and its contribution to intelligence
+
+- extension to levy-flight
+
+- hypothesis about alpha and intelligence
+ 
+- Aim of this study?
 
 # Methods
-Here Bayesflow, short description of levy-flight
+
+## Data
+Data originally from...
+## Participants
+Take the following from the original study
+## Tasks
+
+### Hick Task
+
+### Posner Task
+
+### Sternberg Task
+
+## Procedure
+
+## Analysis
+### Levy-Flight Model
+Params of Bayesflow here
+
+### Structural Equation Model
+General model
 
 # Results
-negative going.
-Maybe run a SEM here, only with alpha
+## Model evaluation
+
+## Bivariate relationship
+
+## SEM
 
 # Discussion
 Low correlations, but negative direction. Need to extend this to more difficult tasks. (Sternberg may already be a difficult task)
