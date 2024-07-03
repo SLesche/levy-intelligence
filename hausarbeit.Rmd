@@ -99,6 +99,19 @@ set.seed(1234)
 knitr::opts_chunk$set(cache.extra = knitr::rand_seed) # this adds random seed to all chunks
 knitr::opts_chunk$set(autodep = TRUE)
 knitr::dep_auto()
+library(papaja)
+source("helper_functions.R")
+source("investigating_results.R")
+source("sem_levy_models.R")
+
+r_refs("r-references.bib")
+
+r_citations <- cite_r(
+  file = "r-references.bib",
+  pkgs = c("papaja", "tidyverse", "knitr", "rmarkdown", "lavaan", "flextable"),
+  omit = FALSE,
+  footnote = TRUE
+  )
 ```
 
 <!-- Setup -->
@@ -119,34 +132,65 @@ knitr::dep_auto()
 - Aim of this study?
 
 # Methods
-
-## Data
-Data originally from...
 ## Participants
-Take the following from the original study
-## Tasks
+The data I analyse here was published in @schubert2017general. The original study consisted of three measurement occasions and included EEG measurement in the first and last measurement occasion. The present analysis focuses on the behavioral data in the first two measurement occasions. The sample consists of N = 122 (72 female, $M_{age} = 36.7, SD_{age} = 13.6$) participants. All of the participants had normal or corrected to normal vision and no history of mental illness, provided informed consent and received 100€ for their participation. 
 
-### Hick Task
+## Materials
+I will focus on behavioral data from the Hick, Sternberg, and Posner Tasks. Detailed information can be found in the original publication [@schubert2017general]. 
 
-### Posner Task
-
-### Sternberg Task
+Intelligence was measured using a computer-adapted version of Raven's Advanced Progressive Matrices (APM) [@ravenAPM] and the Berlin Intelligence Structure Test (BIS) [@jagerBIS].
 
 ## Procedure
+The first two measurement occasions were spaced approximately four months apart. The Hick, Sternberg, and Posner Tasks were administered at the first measurement occasion in the same order for all participants. The APM and BIS were administered at the second measurement occasion.
 
 ## Analysis
+### Behavioral Data
+I excluded all response times which were more than 3 standard deviations of the mean response time for a given participant in a given condition. No further data-pruning was applied.
+
 ### Levy-Flight Model
-Params of Bayesflow here
+I estimated the parameters of the a Levy-Flight model using BayesFlow [@BAYESFLOW]. I used accuracy coding, with the upper boundary representing a correct response and the lower boundary representing an incorrect response. Hence, I fixed the start point $z$ to 0.5. I allowed drift rate $v$, boundary separation $a$, non-decision time $t0$, variability in the non_decision time $st0$ and $\alpha$ to vary between tasks and conditions.
+
+To train the neural approximator, I employed the following priors:
+$$v \sim Normal(3,3)$$
+$$a \sim Gamma(5, 2) + 0.1$$
+$$t0 \sim Gamma(1, 3) + 0.1$$
+$$st0 \sim Beta(1, 3) \cdot 2 \cdot t0$$
+$$\alpha \sim Beta(4, 2) \cdot 2$$
+I simulated 200,000 datasets and then trained the model for 150 epochs. After training, I investigated the computational faithfulness of the neural network by using simulation-based calibration [CITATIOn, Talts et al. 2018]. I investigated the bias of the posterior distributions after applying the amortized inference network on newly simulated data. Furthermore, I investigated the ability of the model to recover true generating parameters by comparing the posterior mean to the true parameters used in simulation.
 
 ### Structural Equation Model
-General model
+I used structural equation modelling to evaluate the correlation between a latent alpha and g. To this end, I constructed a measurement model over all tasks and conditions that includes a trait alpha factor and task-specific method factors. Intelligence was defined as a first order factor over all sub-tests of the BIS as well as the APM. I then investigated the relationship between latent alpha and g. 
 
 # Results
-## Model evaluation
+Model estimation was done in Python 3.11 with Bayesflow version x.x [@BAYESFLOW]. Data analysis was done in `r r_citations$r`. `r r_citations$pkgs`
 
-## Bivariate relationship
+## Levy Flight Model estimation
+The inference net showed no sign of bias in posterior estimation (see Figure \@ref(fig:results-bf-bias)). It also displayed acceptable recovery of true generating parameters (see Figure \@ref(fig:results-bf-recovery)).
+
+(ref:results-bf-bias) Empirical Cumulative Density Functions of Rank Statistics
+```{r results-bf-bias, fig.cap = paste("(ref:results-bf-bias)")}
+knitr::include_graphics(
+  "images/bias_plot.png"
+)
+```
+
+(ref:results-bf-recovery) Recovery of true model parameters
+```{r results-bf-recovery, fig.cap = paste("(ref:results-bf-recovery)")}
+knitr::include_graphics(
+  "images/recovery_plot.png"
+)
+```
+
+## Relationship of alpha and g
+On a bivariate level, alpha displayed consistently negative correlations with all cognitive performance measures (see Figure \@ref:(fig:results-bivariate-plot)). Averaged over tasks, alpha showed a correlation with performance in the APM of $r =$`r results %>% filter(measure == "APM", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` and $r =$`r results %>% filter(measure == "BIS", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` in the BIS.
+
+(ref:results-bivariate-plot) Bivariate Correlation between parameters and cognitive performance
+```{r results-bivariate-plot, fig.cap = paste("(ref:results-bivariate-plot)")}
+plot_by_measure
+```
 
 ## SEM
+The model showed acceptable fit `r print_sem(alpha_g)` and can be seen here [FIGURE]. On a latent level alpha and g correlated to [VALUE]. 
 
 # Discussion
 Low correlations, but negative direction. Need to extend this to more difficult tasks. (Sternberg may already be a difficult task)

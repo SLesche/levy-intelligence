@@ -12,10 +12,11 @@ data <- model_results %>%
   mutate(across(-c(task, sub, condition), as.numeric))
 
 data$APM = data$APMeven + data$APModd
+data$BIS = data$PC + data$PS + data$C + data$M
 
 params <- c("a", "v", "t", "st", "alpha")
 # intelligence <- c("APM")
-intelligence <- c("APM", "PS", "PC", "M", "C")
+intelligence <- c("APM", "BIS", "PS", "PC", "M", "C")
 
 get_correlation <- function(data){
   cors = cor(data[, intelligence], data[, params], use = "pairwise.complete.obs")
@@ -64,8 +65,7 @@ results <- results %>%
     values_to = "cor"
   )
 
-results %>% 
-  filter(measure == "APM") %>% 
+plot_by_measure <- results %>% 
   ggplot(
     aes(
       x = param,
@@ -73,9 +73,8 @@ results %>%
       fill = param,
     )
   )+
-  facet_wrap(~task)+
+  facet_wrap(~measure)+
   geom_boxplot()+
   theme_classic()+
   geom_hline(yintercept = 0, color = "red")
 
-hist(data$alpha)

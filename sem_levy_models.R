@@ -140,7 +140,7 @@ full_combined_model <- glue::glue(
   
   {true_g_factor}
   
-  g ~~ alpha + v
+  g ~~ v + alpha
   sternberg ~~ posner
   "
 )
@@ -155,7 +155,20 @@ combined_model <- glue::glue(
   sternberg ~~ posner
   "
 )
+v_combined_model <- glue::glue(
+  "
+  {v_factor}
+  
+  {true_g_factor}
+  
+  g ~~ v
+  sternberg ~~ posner
+  "
+)
 
-alpha_g <- sem(model = combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE, missing = "fiml")
+alpha_g <- sem(model = combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE)
 summary(alpha_g, fit.measures = TRUE, standardized = TRUE)
+
+v_g <- sem(model = v_combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE)
+summary(v_g, fit.measures = TRUE, standardized = TRUE)
 
