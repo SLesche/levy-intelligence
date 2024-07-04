@@ -148,7 +148,7 @@ The first two measurement occasions were spaced approximately four months apart.
 I excluded all response times which were more than 3 standard deviations of the mean response time for a given participant in a given condition. No further data-pruning was applied.
 
 ### Levy-Flight Model
-I estimated the parameters of the a Levy-Flight model using BayesFlow [@BAYESFLOW]. I used accuracy coding, with the upper boundary representing a correct response and the lower boundary representing an incorrect response. Hence, I fixed the start point $z$ to 0.5. I allowed drift rate $v$, boundary separation $a$, non-decision time $t0$, variability in the non_decision time $st0$ and $\alpha$ to vary between tasks and conditions.
+I estimated the parameters of the a Levy-Flight model using BayesFlow [@BAYESFLOW]. I used accuracy coding, with the upper boundary representing a correct response and the lower boundary representing an incorrect response. Hence, I fixed the start point $z$ to 0.5. I allowed drift rate $v$, boundary separation $a$, non-decision time $t0$, variability in the non-decision time $st0$ and $\alpha$ to vary between tasks and conditions.
 
 To train the neural approximator, I employed the following priors:
 $$v \sim Normal(3,3)$$
