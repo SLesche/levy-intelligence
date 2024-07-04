@@ -41,15 +41,15 @@ print_sem <- function(sem_object){
   message = paste0(
     "$\\chi^2(",
     df,
-    ") = ",
+    ")$ = ",
     round(chisq, 2),
-    ", p = ",
+    ", p ",
     papaja::apa_p(p),
     ", CFI = ",
     round(cfi, 2),
     ", RMSEA = ",
     round(rmsea, 2),
-    "$"
+    ""
   )
   
   return(message)

@@ -182,7 +182,7 @@ knitr::include_graphics(
 ```
 
 ## Relationship of alpha and g
-On a bivariate level, alpha displayed consistently negative correlations with all cognitive performance measures (see Figure \@ref:(fig:results-bivariate-plot)). Averaged over tasks, alpha showed a correlation with performance in the APM of $r =$`r results %>% filter(measure == "APM", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` and $r =$`r results %>% filter(measure == "BIS", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` in the BIS.
+On a bivariate level, alpha displayed consistently negative correlations with all cognitive performance measures (see Figure \@ref(fig:results-bivariate-plot)). Averaged over tasks, alpha showed a correlation with performance in the APM of $r =$`r results %>% filter(measure == "APM", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` and $r =$`r results %>% filter(measure == "BIS", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` in the BIS.
 
 (ref:results-bivariate-plot) Bivariate Correlation between parameters and cognitive performance
 ```{r results-bivariate-plot, fig.cap = paste("(ref:results-bivariate-plot)")}
