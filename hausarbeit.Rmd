@@ -190,7 +190,14 @@ plot_by_measure
 ```
 
 ## SEM
-The model showed acceptable fit `r print_sem(alpha_g)` and can be seen here [FIGURE]. On a latent level alpha and g correlated to [VALUE]. 
+The model showed acceptable fit `r print_sem(alpha_g)` and can be seen in Figure \@ref(fig:results-sem-alpha). On a latent level alpha and g correlated to $-0.44$. 
+
+(ref:results-sem-alpha) Structural Equation Model of Alpha and Intelligence
+```{r results-sem-alpha, fig.cap = paste("(ref:results-sem-alpha)")}
+knitr::include_graphics(
+  "images/sem_alpha_plot.png"
+)
+```
 
 # Discussion
 Low correlations, but negative direction. Need to extend this to more difficult tasks. (Sternberg may already be a difficult task)

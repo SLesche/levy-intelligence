@@ -1,7 +1,6 @@
 library(tidyverse)
 library(glue)
 library(lavaan)
-library(semPlot)
 
 get_names <- function(names, pattern){
   matches = names[stringr::str_detect(names, pattern)]
@@ -169,6 +168,13 @@ v_combined_model <- glue::glue(
 alpha_g <- sem(model = combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE)
 summary(alpha_g, fit.measures = TRUE, standardized = TRUE)
 
-v_g <- sem(model = v_combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE)
-summary(v_g, fit.measures = TRUE, standardized = TRUE)
-
+# v_g <- sem(model = v_combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE)
+# summary(v_g, fit.measures = TRUE, standardized = TRUE)
+# 
+# full_g <- sem(model = full_combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE)
+# summary(full_g, fit.measures = TRUE, standardized = TRUE)
+# 
+# hist(model_results$alpha)
+# 
+# plot(model_results$alpha, model_results$v)
+# plot(data$alpha_posner_pi, data$APM)
