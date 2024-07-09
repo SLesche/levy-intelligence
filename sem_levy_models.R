@@ -82,10 +82,10 @@ alpha_factor <- glue::glue("
   alpha_posner_ni ~~ p.alpha*alpha_posner_ni
   alpha_posner_pi ~~ p.alpha*alpha_posner_pi
 
-  sternberg =~ sload.alpha*alpha_sternberg_s1 + sload.alpha*alpha_sternberg_s3 + sload.alpha*alpha_sternberg_s5
-  # hick =~ alpha_hick_0bit + alpha_hick_1bit + alpha_hick_2bit
+  sternberg =~ 1*alpha_sternberg_s1 + 1*alpha_sternberg_s3 + 1*alpha_sternberg_s5
+  # hick =~ 1*alpha_hick_0bit + 1*alpha_hick_1bit + 1*alpha_hick_2bit
 
-  posner =~ pload.alpha*alpha_posner_ni + pload.alpha*alpha_posner_pi
+  posner =~ 1*alpha_posner_ni + 1*alpha_posner_pi
 
   # hick ~~ 0*alpha
   posner ~~ 0*alpha
