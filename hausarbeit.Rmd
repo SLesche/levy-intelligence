@@ -133,10 +133,10 @@ r_citations <- cite_r(
 
 # Methods
 ## Participants
-The data I analyse here was published in @schubert2017general. The original study consisted of three measurement occasions and included EEG measurement in the first and last measurement occasion. The present analysis focuses on the behavioral data in the first two measurement occasions. The sample consists of N = 122 (72 female, $M_{age} = 36.7, SD_{age} = 13.6$) participants. All of the participants had normal or corrected to normal vision and no history of mental illness, provided informed consent and received 100€ for their participation. 
+The data I analyse here was published in @schubert2017general. The original study consisted of three measurement occasions and included EEG measurements in the first and last measurement occasion. The present analysis focuses on the behavioral data collected during the first two measurement occasions. The sample consists of N = 122 (72 female, $M_{age} = 36.7, SD_{age} = 13.6$) participants. All of the participants had normal or corrected to normal vision, no history of mental illness, provided informed consent, and received 100€ for their participation. 
 
 ## Materials
-I will focus on behavioral data from the Hick, Sternberg, and Posner Tasks. Detailed information can be found in the original publication [@schubert2017general]. 
+I will focus on behavioral data from the Hick, Sternberg, and Posner Tasks. Detailed information can be found in the original publication [@schubert2017general].
 
 Intelligence was measured using a computer-adapted version of Raven's Advanced Progressive Matrices (APM) [@ravenAPM] and the Berlin Intelligence Structure Test (BIS) [@jagerBIS].
 
@@ -144,11 +144,8 @@ Intelligence was measured using a computer-adapted version of Raven's Advanced P
 The first two measurement occasions were spaced approximately four months apart. The Hick, Sternberg, and Posner Tasks were administered at the first measurement occasion in the same order for all participants. The APM and BIS were administered at the second measurement occasion.
 
 ## Analysis
-### Behavioral Data
-I excluded all response times which were more than 3 standard deviations of the mean response time for a given participant in a given condition. No further data-pruning was applied.
-
 ### Levy-Flight Model
-I estimated the parameters of the a Levy-Flight model using BayesFlow [@BAYESFLOW]. I used accuracy coding, with the upper boundary representing a correct response and the lower boundary representing an incorrect response. Hence, I fixed the start point $z$ to 0.5. I allowed drift rate $v$, boundary separation $a$, non-decision time $t0$, variability in the non-decision time $st0$ and $\alpha$ to vary between tasks and conditions.
+I estimated the parameters of the Levy-Flight model using BayesFlow [@BAYESFLOW]. I used accuracy coding, with the upper boundary representing a correct response and the lower boundary representing an incorrect response. Hence, I fixed the start point $z$ to 0.5. I allowed drift rate $v$, boundary separation $a$, non-decision time $t0$, variability in the non-decision time $st0$ and $\alpha$ to vary between tasks and conditions.
 
 To train the neural approximator, I employed the following priors:
 $$v \sim Normal(3,3)$$
@@ -159,10 +156,12 @@ $$\alpha \sim Beta(4, 2) \cdot 2$$
 I simulated 200,000 datasets and then trained the model for 150 epochs. After training, I investigated the computational faithfulness of the neural network by using simulation-based calibration [CITATIOn, Talts et al. 2018]. I investigated the bias of the posterior distributions after applying the amortized inference network on newly simulated data. Furthermore, I investigated the ability of the model to recover true generating parameters by comparing the posterior mean to the true parameters used in simulation.
 
 ### Structural Equation Model
-I used structural equation modelling to evaluate the correlation between a latent alpha and g. To this end, I constructed a measurement model over all tasks and conditions that includes a trait alpha factor and task-specific method factors. Intelligence was defined as a first order factor over all sub-tests of the BIS as well as the APM. I then investigated the relationship between latent alpha and g. 
+I used structural equation modelling to evaluate the correlation between a latent first order factors of the alpha parameter over all tasks and a g factor over all intelligence measures. In addition to the first order factor over all tasks and conditions, I included task-specific method factors. Intelligence was defined as a first order factor over all sub-tests of the BIS as well as the APM. I then investigated the relationship between latent the latent factors alpha and g.
 
 # Results
 Model estimation was done in Python 3.11 with Bayesflow version x.x [@BAYESFLOW]. Data analysis was done in `r r_citations$r`. `r r_citations$pkgs`
+
+I excluded all response times which deviated more than 3 standard deviations from the mean response time for a given participant in a given condition.  No further data-pruning was applied.
 
 ## Levy Flight Model estimation
 The inference net showed no sign of bias in posterior estimation (see Figure \@ref(fig:results-bf-bias)). It also displayed acceptable recovery of true generating parameters (see Figure \@ref(fig:results-bf-recovery)).
@@ -182,7 +181,7 @@ knitr::include_graphics(
 ```
 
 ## Relationship of alpha and g
-On a bivariate level, alpha displayed consistently negative correlations with all cognitive performance measures (see Figure \@ref(fig:results-bivariate-plot)). Averaged over tasks, alpha showed a correlation with performance in the APM of $r =$`r results %>% filter(measure == "APM", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` and $r =$`r results %>% filter(measure == "BIS", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` in the BIS.
+On a bivariate level, alpha displayed consistently negative correlations with all cognitive performance measures (see Figure \@ref(fig:results-bivariate-plot)). Averaged over tasks and conditions, alpha showed a correlation with performance in the APM of $r =$`r results %>% filter(measure == "APM", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` and $r =$`r results %>% filter(measure == "BIS", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` in the BIS.
 
 (ref:results-bivariate-plot) Bivariate Correlation between parameters and cognitive performance
 ```{r results-bivariate-plot, fig.cap = paste("(ref:results-bivariate-plot)")}
@@ -190,6 +189,8 @@ plot_by_measure
 ```
 
 ## SEM
+The measurement model with method factors for all three tasks failed to fit. This full model always estimated the variance of one of the method factors to be negative. I therefore excluded one of the method factors from the model [Zitation for M-1 Models here] and only retained a factor for the Sternberg and Posner Task. 
+
 The model showed acceptable fit `r print_sem(alpha_g)` and can be seen in Figure \@ref(fig:results-sem-alpha). On a latent level alpha and g correlated to $-0.44$. 
 
 (ref:results-sem-alpha) Structural Equation Model of Alpha and Intelligence
