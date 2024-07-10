@@ -7,9 +7,104 @@ model_results <- read.csv("data/levy_data/results/levy_mat_parameters.csv") %>%
 
 intelligence_results <- read.csv2("data/iq_data/ERPData.csv")
 
+posner_data <- haven::read_sav("./data/Posner_RawData_0503.sav")
+hick_data <- haven::read_sav("./data/Hick_RawData_1901.sav")
+sternberg_data <- haven::read_sav("./data/Sternberg_RawData_1901.sav")
+
+is_outlier <- function(vector){
+  mean = mean(vector, na.rm = TRUE)
+  sd = sd(vector, na.rm = TRUE)
+  
+  is_outlier = (vector < mean - 3*sd) | (vector > mean + 3*sd)
+  return(is_outlier)
+}
+
+posner_data_clean <- posner_data %>% 
+  group_by(Subject, condNEW) %>% 
+  mutate(is_outlier = is_outlier(RT)) %>% 
+  filter(is_outlier == 0) %>% 
+  select(
+    subject = Subject,
+    condition = condNEW,
+    resp = Accuracy,
+    rt = RT
+  ) %>% 
+  mutate(condition = ifelse(condition == 1, "pi", "ni"),
+         task = "posner") %>% 
+  ungroup()
+
+hick_data_clean <- hick_data %>% 
+  group_by(Subject, condNEW) %>% 
+  mutate(is_outlier = is_outlier(RT)) %>% 
+  filter(is_outlier == 0) %>% 
+  select(
+    subject = Subject,
+    condition = condNEW,
+    resp = Accuracy,
+    rt = RT
+  ) %>% 
+  mutate(
+    condition = case_when(
+      condition == 1 ~ "0bit",
+      condition == 2 ~ "1bit",
+      condition == 3 ~ "2bit"
+    ),
+    task = "hick"
+  ) %>% 
+  ungroup()
+
+sternberg_data_clean <- sternberg_data %>% 
+  group_by(Subject, condNEW) %>% 
+  mutate(is_outlier = is_outlier(RT)) %>% 
+  filter(is_outlier == 0) %>% 
+  select(
+    subject = Subject,
+    condition = condNEW,
+    resp = Accuracy,
+    rt = RT
+  ) %>% 
+  mutate(
+    condition = case_when(
+      condition == 1 ~ "s1",
+      condition == 2 ~ "s3",
+      condition == 3 ~ "s5"
+    ),
+    task = "sternberg"
+  ) %>% 
+  ungroup()
+
+hick_data_removed <- 1 - nrow(hick_data_clean) / nrow(hick_data)
+posner_data_removed <- 1 - nrow(posner_data_clean) / nrow(posner_data)
+sternberg_data_removed <- 1 - nrow(sternberg_data_clean) / nrow(sternberg_data)
+
+hick_data_mean_values <- hick_data_clean %>% 
+  group_by(task, condition, subject) %>% 
+  summarize(
+    mean_rt = mean(rt, na.rm = TRUE),
+    mean_acc = mean(resp, na.rm = TRUE)
+  )
+
+posner_data_mean_values <- posner_data_clean %>% 
+  group_by(task, condition, subject) %>% 
+  summarize(
+    mean_rt = mean(rt, na.rm = TRUE),
+    mean_acc = mean(resp, na.rm = TRUE)
+  )
+
+sternberg_data_mean_values <- sternberg_data_clean %>% 
+  group_by(task, condition, subject) %>% 
+  summarize(
+    mean_rt = mean(rt, na.rm = TRUE),
+    mean_acc = mean(resp, na.rm = TRUE)
+  )
+
+task_data_mean_values <- rbind(hick_data_mean_values, posner_data_mean_values, sternberg_data_mean_values)
+
 data <- model_results %>%
   left_join(., intelligence_results) %>%
-  mutate(across(-c(task, sub, condition), as.numeric))
+  mutate(across(-c(task, sub, condition), as.numeric)) %>% 
+  left_join(., task_data_mean_values, by = c("Subject" = "subject", "task", "condition"))
+
 
 data$APM = data$APMeven + data$APModd
 data$BIS = data$PC + data$PS + data$C + data$M
@@ -23,21 +118,11 @@ get_correlation <- function(data){
   return(cors)
 }
 
-run_lm <- function(data){
-  data = data %>% 
-    mutate(
-      across(c(a, t, v, st, alpha), ~scale(.)[, 1])
-    )
-  lm = lm(APM ~ a + t + v + st + alpha, data = data)
-  return(lm)
-}
-
 nested_data <- data %>% 
   group_by(task, condition) %>% 
   nest() %>% 
   mutate(
-    cors = map(data, get_correlation),
-    lm = map(data, run_lm)
+    cors = map(data, get_correlation)
   )
 
 results <- data.frame()

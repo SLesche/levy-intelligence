@@ -161,7 +161,7 @@ I used structural equation modelling to evaluate the correlation between a laten
 # Results
 Model estimation was done in Python 3.11 with Bayesflow version x.x [@BAYESFLOW]. Data analysis was done in `r r_citations$r`. `r r_citations$pkgs`
 
-I excluded all response times which deviated more than 3 standard deviations from the mean response time for a given participant in a given condition.  No further data-pruning was applied.
+I excluded all response times which deviated more than 3 standard deviations from the mean response time for a given participant in a given condition. This removed `r round(hick_data_removed*100, 2)` % of the data in the Hick task, `r round(posner_data_removed*100, 2)` % of the data in the Posner task, and `r round(sternberg_data_removed*100, 2)` % of the data in the Sternberg task. No further data-pruning was applied.
 
 ## Levy Flight Model estimation
 The inference net showed no sign of bias in posterior estimation (see Figure \@ref(fig:results-bf-bias)). It also displayed acceptable recovery of true generating parameters (see Figure \@ref(fig:results-bf-recovery)).

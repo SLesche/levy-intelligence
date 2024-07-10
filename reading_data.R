@@ -66,7 +66,9 @@ sternberg_data_clean <- sternberg_data %>%
   ) %>% 
   ungroup()
 
-
+hick_data_removed <- 1 - nrow(hick_data_clean) / nrow(hick_data)
+posner_data_removed <- 1 - nrow(posner_data_clean) / nrow(posner_data)
+sternberg_data_removed <- 1 - nrow(sternberg_data_clean) / nrow(sternberg_data)
 
 # Need to save per participant with sub, cond, response, rt,
 filepath <- "./data/levy_data/" 
