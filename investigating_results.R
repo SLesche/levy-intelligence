@@ -6,6 +6,26 @@ model_results <- read.csv("data/levy_data/results/levy_mat_parameters.csv") %>%
   )
 
 intelligence_results <- read.csv2("data/iq_data/ERPData.csv")
+# 
+# intelligence_long <- intelligence_results %>% 
+#   pivot_longer(
+#     cols = SRTCRT_P1_S1:P_P3_S2,
+#     names_to = "measurement",
+#     values_to = "latency"
+#   ) %>% 
+#   separate(measurement, into = c("task", "component", "session")) %>% 
+#   pivot_wider(
+#     names_from = "component",
+#     values_from = "latency"
+#   ) %>% 
+#   filter(session == "S1") %>% 
+#   mutate(
+#     task = case_when(
+#       task == "SRTCRT" ~ "hick",
+#       task == "S" ~ "sternberg",
+#       task == "P" ~ "posner"
+#     )
+#   )
 
 posner_data <- haven::read_sav("./data/Posner_RawData_0503.sav")
 hick_data <- haven::read_sav("./data/Hick_RawData_1901.sav")
@@ -81,21 +101,24 @@ hick_data_mean_values <- hick_data_clean %>%
   group_by(task, condition, subject) %>% 
   summarize(
     mean_rt = mean(rt, na.rm = TRUE),
-    mean_acc = mean(resp, na.rm = TRUE)
+    mean_acc = mean(resp, na.rm = TRUE),
+    sd_rt = sd(rt, na.rm = TRUE)
   )
 
 posner_data_mean_values <- posner_data_clean %>% 
   group_by(task, condition, subject) %>% 
   summarize(
     mean_rt = mean(rt, na.rm = TRUE),
-    mean_acc = mean(resp, na.rm = TRUE)
+    mean_acc = mean(resp, na.rm = TRUE),
+    sd_rt = sd(rt, na.rm = TRUE)
   )
 
 sternberg_data_mean_values <- sternberg_data_clean %>% 
   group_by(task, condition, subject) %>% 
   summarize(
     mean_rt = mean(rt, na.rm = TRUE),
-    mean_acc = mean(resp, na.rm = TRUE)
+    mean_acc = mean(resp, na.rm = TRUE),
+    sd_rt = sd(rt, na.rm = TRUE)
   )
 
 task_data_mean_values <- rbind(hick_data_mean_values, posner_data_mean_values, sternberg_data_mean_values)
