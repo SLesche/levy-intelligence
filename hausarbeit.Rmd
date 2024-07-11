@@ -119,21 +119,29 @@ r_citations <- cite_r(
 
 <!-- Here we can incorporate child markdown-documents as the separate parts -->
 # Introduction
-- Intelligence and mental speed, which processes play a role here. 
+Intelligence is one of the most researched constructs in psychology, playing a crucial role in predicting success in education, job performance, and overall well-being. Understanding the cognitive processes that underpin intelligence has been the focus of decades of research. One of the most robust findings in this area is the relationship between measures of mental speed and intelligence, with faster cognitive processing often associated with higher intelligence.
 
-- Traditionally, is investigated by using cognitive models. This shows impact of drift rate on intelligence. Other parameters not that strong
+In a review of 172 studies, @sheppard2008intelligence reported an average correlation of $r = -.24$ between various mental speed measures and various intelligence measures. Most studies investigating the relationship between intelligence and mental speed use elementary cognitive tasks (ECTs) to obtain a measure of mental speed. ECTs are simple tasks with very low cognitive demands. For example, participants have to respond by key-press in which of two squares a stimulus has appeared. This limits the role of individual differences in strategy and allows researchers to obtain a pure measure of mental speed.
 
-- but what parts of mental speed? Variability aswell? @doebler2016relationship shows consistent negative relationships between the variability of RT and intelligence in Hick tasks (the more variable, the less intelligent)
+Mental speed is assessed at different levels: behaviorally, through psychophysiological measures, or via cognitive models. Researchers find robust negative correlations between intelligence and both mean response time and variability of response time [@jensen2006clocking; @doebler2016relationship]. More intelligent individuals tend to have lower mean response times and lower variability in response times. Using EEG measures, @schubert2017general found that the latency of event-related potentials are able to explain 80% of the variance in intelligence. In cognitive models, evidence accumulation models like the drift-diffusion model (DDM) [@ratcliff2007diffusion] are employed to obtain model parameters of mental speed. 
 
-- DDM and its contribution to intelligence
+The DDM assumes that participants steadily accumulate evidence during a trial. Once they have accumulated enough evidence pointing towards a response, a decision and subsequent reaction is made.
+The model attempts to fit the empirical distribution of response times and accuracies by optimizing several different parameters. These parameters control the speed of evidence accumulation, the amount of evidence needed for a decision, and the time that is not used for the decision process, but rather needed for stimulus encoding or motor responses.
 
-- extension to levy-flight
+The basic DDM... it is often extended by, to modify.
 
-- hypothesis about alpha and intelligence
+Of these parameters, drift rate has the most robust correlation to intelligence
 
-- Aim of this study?
+The DDM makes the assumption that noise is ... This means that large jumps are unlikely... Recently, @LEVY introduced a new version taht includes alpha... This is able to account for fast errors and fits data better @LEVY.
 
-- should use multiple tasks (@schubert2016trait)
+From a variability perspective, you would expect alpha to correlate psotively with intelligence. This is inefficient jumping hypothesis. However, you could also argue that... "effecient jumping"
+here, the noise is used efficienlty.
+
+This study focuses on determining this issue. We will use data from @schubert2017general and fit the levy flight model. Then investigate ...
+
+Because @schubert2016trait, we will fit this to multiple tasks and conditions and obtain a latent factor over alpha to account for measurement error. Then, we will check the correlation with intelligence.
+
+Positive correlations would mean... Negative correlations would mean...
 
 # Methods
 ## Participants
