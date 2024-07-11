@@ -1,6 +1,6 @@
 ---
-title             : "Are smarter brains more efficient? An investigation of the relationship between intelligence and the alpha parameter of the Levy-Flight Model"
-shorttitle        : "Are smarter brains more efficient?"
+title             : "Jump around! An investigation of the relationship between intelligence and the alpha parameter of the Levy-Flight Model"
+shorttitle        : "Jump around!"
 
 author: 
   - name          : "Sven Lesche"
@@ -130,18 +130,21 @@ The model attempts to fit the empirical distribution of response times and accur
 
 Further parameters of across-trial variability can be added to reflect changes in diffusion model parameters over time. Variability of the starting point _s~z~_ accounts for differences in a-priori bias towards one response alternative across trials [@laming1968information; @ratcliff1998modeling]. Variability of drift rate $\eta$ reflects changes in drift rate across trials and allows the model to account for systematic differences between trials, such as error responses being systematically faster than correct responses [@ratcliff1978theory; @ratcliff1998modeling]. Finally, variability of non-decision time _s~t~_ reflects fluctuations in the duration of encoding or motor-execution processes across trials.
 
-Of these parameters, drift rate has so far shown the most robust correlation to intelligence [citations]. Other parameters have shown...
+Of these parameters, drift rate has so far shown the most robust correlation to intelligence [@schubert2015decomposing; @schmiedek2007individual; @ratcliff2011effects]. Boundary separation is often negatively associated with intelligence, but the effect is smaller than for drift rates [@schubert2015decomposing; @ratcliff2011effects].
 
-The DDM makes the assumption that noise is ... This means that large jumps are unlikely... Recently, @wieschen2020jumping introduced a new version taht includes alpha... This is able to account for fast errors and fits data better @wieschen2020jumping.
+In both the simple and full DDM, the drift rate is an average rate of evidence accumulation. In each step, this average rate is influence by noise, resulting in the random walk with a certain drift characterizing the evidence accumulation process. This noise is assumed to be normally distributed with a mean of 0. The standard deviation of the noise distribution is the "diffusion constant" is is set to 1 in most applications.
 
-From a variability perspective, you would expect alpha to correlate psotively with intelligence. This is inefficient jumping hypothesis. However, you could also argue that... "effecient jumping"
-here, the noise is used efficienlty.
+Under the assumption that noise is normally distributed, large jumps in accumulated evidence become very unlikely. Recently, @voss2019sequential introduced an extension of the DDM that modifies the noise distribution. Here, the normal distribution is replaced by a heavy tailed distribution. This increases the likelihood of larger jumps occurring in the evidence accumulation process. The Cauchy distribution is an example of such a heavy-tailed distribution. Both the Cauchy distribution and the normal distribution are specific instances of the family of so-called Levy alpha-stable distributions. Within this family, a stability parameter $\alpha$ governs the heaviness in the tails of the distribution. $\alpha$ = 2 results in the normal distribution, $\alpha$ = 1 results in the Cauchy distribution. In the Levy-flight model, $\alpha$ is an additional parameter that can be estimated from the data [@voss2019sequential; @wieschen2020jumping]. 
 
-This study focuses on determining this issue. We will use data from @schubert2017general and fit the levy flight model. Then investigate ...
+Higher values of $\alpha$ lead to more stable evidence accumulation. Fewer extreme jumps lead to slower mean response times and higher accuracy. Lower values of $alpha$ lead to faster response times at the cost of lower accuracy.
 
-Because @schubert2016trait, we will fit this to multiple tasks and conditions and obtain a latent factor over alpha to account for measurement error. Then, we will check the correlation with intelligence.
+In behavioral data, higher variability of response times is associated with lower intelligence [@doebler2016relationship]. Intelligent individuals are more "steady" in their response times. Following these findings, higher values of alpha may be positively associated with intelligence. @wieschen2020jumping refers to this as the "inefficient jumping" hypothesis. The jumps in evidence accumulation more common in heavy-tailed noise distributions are deemed inefficient while completing the response time task. Intelligent individuals should therefore display fewer inefficient jumps and thus have higher values of $\alpha$.
 
-Positive correlations would mean... Negative correlations would mean...
+Contrasting this, jumps in evidence accumulation may also be beneficial. In simple response time tasks with high accuracy, erratically accumulating information may be an efficient way to decrease response times. This is termed the "efficient jumping" hypothesis [@wieschen2020jumping]. The efficient jumping hypothesis claims that more intelligent individuals make use of larger jumps in evidence accumulation to complete the task more quickly. They should therefore display lower values of $\alpha$.
+
+This present work aims to provide a first insight into the question of efficient vs. inefficient jumping. To this end, I applied the Levy-flight model to data from three different response time tasks and investigated the correlation between the $\alpha$ parameter and intelligence. Following @schubert2016trait, I used structural equation modeling to obtain a latent factor for both $\alpha$ and intelligence to account for measurement error. 
+
+The inefficient jumping hypothesis predicts positive latent correlations between $\alpha$ and _g_. More intelligent individuals display smaller heavy-tails. The efficient jumping hypothesis predicts negative correlations between $\alpha$ and _g_. More intelligent individuals make efficient use of jumps in evidence accumulation and thus display heavier tails.
 
 # Methods
 ## Participants
