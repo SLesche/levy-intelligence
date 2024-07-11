@@ -123,16 +123,16 @@ Intelligence is one of the most researched constructs in psychology, playing a c
 
 In a review of 172 studies, @sheppard2008intelligence reported an average correlation of $r = -.24$ between various mental speed measures and various intelligence measures. Most studies investigating the relationship between intelligence and mental speed use elementary cognitive tasks (ECTs) to obtain a measure of mental speed. ECTs are simple tasks with very low cognitive demands. For example, participants have to respond by key-press in which of two squares a stimulus has appeared. This limits the role of individual differences in strategy and allows researchers to obtain a pure measure of mental speed.
 
-Mental speed is assessed at different levels: behaviorally, through psychophysiological measures, or via cognitive models. Researchers find robust negative correlations between intelligence and both mean response time and variability of response time [@jensen2006clocking; @doebler2016relationship]. More intelligent individuals tend to have lower mean response times and lower variability in response times. Using EEG measures, @schubert2017general found that the latency of event-related potentials are able to explain 80% of the variance in intelligence. In cognitive models, evidence accumulation models like the drift-diffusion model (DDM) [@ratcliff2007diffusion] are employed to obtain model parameters of mental speed. 
+Mental speed is assessed at different levels: behaviorally, through psychophysiological measures, or via cognitive models. Researchers find robust negative correlations between intelligence and both mean response time and variability of response time [@jensen2006clocking; @doebler2016relationship]. More intelligent individuals tend to have lower mean response times and lower variability in response times. Using EEG measures, @schubert2017general found that the latency of event-related potentials are able to explain 80% of the variance in intelligence. In cognitive models, evidence accumulation models like the drift-diffusion model (DDM) [@ratcliff2008diffusion] are employed to obtain model parameters of mental speed. 
 
 The DDM assumes that participants steadily accumulate evidence during a trial. Once they have accumulated enough evidence pointing towards a response, a decision and subsequent reaction is made.
-The model attempts to fit the empirical distribution of response times and accuracies by optimizing several different parameters. These parameters control the speed of evidence accumulation, the amount of evidence needed for a decision, and the time that is not used for the decision process, but rather needed for stimulus encoding or motor responses.
+The model attempts to fit the empirical distribution of response times and accuracies by optimizing several different parameters. First, response time is separated into decision time, where the noisy evidence accumulation process takes place, and non-decision time $T_{er}$. Non-decision time incorporates processes such as stimulus encoding and motor processes. Decision time is further controlled by three main parameters: (1) the boundary separation $a$ describes the distance between decision boundaries and represents the amount of evidence required to reach a decision, (2) the mean drift rate $v$ is the average rate at which evidence is accumulated and (3) the mean starting point _z_ represents the average point at which the evidence accumulation process begins and can account for an a-priori bias towards one of the two-choice alternatives. 
 
-The basic DDM... it is often extended by, to modify.
+Further parameters of across-trial variability can be added to reflect changes in diffusion model parameters over time. Variability of the starting point _s~z~_ accounts for differences in a-priori bias towards one response alternative across trials [@laming1968information; @ratcliff1998modeling]. Variability of drift rate $\eta$ reflects changes in drift rate across trials and allows the model to account for systematic differences between trials, such as error responses being systematically faster than correct responses [@ratcliff1978theory; @ratcliff1998modeling]. Finally, variability of non-decision time _s~t~_ reflects fluctuations in the duration of encoding or motor-execution processes across trials.
 
-Of these parameters, drift rate has the most robust correlation to intelligence
+Of these parameters, drift rate has so far shown the most robust correlation to intelligence [citations]. Other parameters have shown...
 
-The DDM makes the assumption that noise is ... This means that large jumps are unlikely... Recently, @LEVY introduced a new version taht includes alpha... This is able to account for fast errors and fits data better @LEVY.
+The DDM makes the assumption that noise is ... This means that large jumps are unlikely... Recently, @wieschen2020jumping introduced a new version taht includes alpha... This is able to account for fast errors and fits data better @wieschen2020jumping.
 
 From a variability perspective, you would expect alpha to correlate psotively with intelligence. This is inefficient jumping hypothesis. However, you could also argue that... "effecient jumping"
 here, the noise is used efficienlty.
@@ -219,6 +219,8 @@ We used the SEM to measure trait alpha across tasks, as recommended in @schubert
 
 This is in contrast to the findings that less variable results are found in more intelligent individuals
 maybe in the ongoing variability discussion
+
+You could talk about relationship of alpha and mean rt / sd_rt. 
 <!-- References -->
 
 \newpage
