@@ -216,16 +216,19 @@ knitr::include_graphics(
 ```
 
 # Discussion
-Low correlations, but negative direction. Need to extend this to more difficult tasks. (Sternberg may already be a difficult task)
+Low correlations, but negative direction. This would mean that... 
 
-We used the SEM to measure trait alpha across tasks, as recommended in @schubert2016trait
+We used the SEM to measure trait alpha across tasks, as recommended in @schubert2016trait. our findings support the notion that you should do that
+
+However, Need to extend this to more difficult tasks. (Sternberg may already be a difficult task)
+
 
 This is in contrast to the findings that less variable results are found in more intelligent individuals
 maybe in the ongoing variability discussion
 
-You could talk about relationship of alpha and mean rt / sd_rt. 
-<!-- References -->
+Limitations: Tasks, intelligence measures (BIS), but probably fine with APM latency, no "difficult" tasks
 
+<!-- References -->
 \newpage
 
 # References
