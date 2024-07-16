@@ -134,7 +134,53 @@ data$BIS = data$PC + data$PS + data$C + data$M
 
 params <- c("a", "v", "t", "st", "alpha")
 # intelligence <- c("APM")
-intelligence <- c("APM", "BIS", "PS", "PC", "M", "C", "mean_rt", "sd_rt", "mean_acc")
+intelligence <- c("APM", "BIS", "PS", "PC", "M", "C")
+behav <- c("mean_rt", "sd_rt", "mean_acc")
+
+wide_data <- data %>% 
+  pivot_wider(
+    id_cols = c("Subject", intelligence),
+    names_from = c("task", "condition"),
+    values_from = c(params, behav)
+  )
+
+# Compute the correlation matrix
+cor_matrix <- cor(wide_data[, -1], wide_data[, -1], use = "pairwise.complete.obs")
+
+# Replace "mean_" with "mean" and "sd_" with "sd"
+modified_colnames <- gsub("^mean_", "mean", colnames(cor_matrix))
+modified_colnames <- gsub("^sd_", "sd", modified_colnames)
+
+# Extract the prefix (the part before the underscore)
+prefixes <- sapply(modified_colnames, function(x) strsplit(x, "_")[[1]][1])
+
+# Replace all labels in a group with empty spaces except for the middle one
+grouped_labels <- prefixes
+unique_prefixes <- unique(prefixes)
+
+for (prefix in unique_prefixes) {
+  indices <- which(prefixes == prefix)
+  middle_index <- indices[ceiling(length(indices) / 2)]
+  grouped_labels[indices] <- ""
+  grouped_labels[middle_index] <- prefix
+}
+
+# Apply grouped labels to both row and column names
+colnames(cor_matrix) <- grouped_labels
+rownames(cor_matrix) <- grouped_labels
+
+# Plot the correlation matrix
+col <- colorRampPalette(c("#4477AA", "#77AADD", "#FFFFFF", "#EE9988", "#BB4444"))
+corrplot::corrplot(cor_matrix, method="color", col=col(200),  
+                   type="lower", 
+                   tl.col="black", tl.srt=45, # Text label color and rotation
+                   tl.cex=1.2, # Increase text label size
+                   mar=c(0,0,1,0), # Increase margins
+                   # hide correlation coefficient on the principal diagonal
+                   diag=FALSE
+
+)
+
 
 get_correlation <- function(data){
   cors = cor(data[, intelligence], data[, params], use = "pairwise.complete.obs")
