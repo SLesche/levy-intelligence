@@ -229,6 +229,9 @@ plot_by_measure <- results %>%
   )+
   facet_wrap(~measure)+
   geom_boxplot()+
+  geom_hline(yintercept = 0, color = "red")+
   theme_classic()+
-  geom_hline(yintercept = 0, color = "red")
+  theme(text=element_text(size=30),
+        axis.text = element_text(size=20))
+
 
