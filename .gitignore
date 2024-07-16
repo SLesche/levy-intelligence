@@ -13,3 +13,4 @@ data/cognitive_control/raw_data/
 *.db
 
 training_data*.obj
+.Rhistory
