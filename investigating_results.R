@@ -134,7 +134,7 @@ data$BIS = data$PC + data$PS + data$C + data$M
 
 params <- c("a", "v", "t", "st", "alpha")
 # intelligence <- c("APM")
-intelligence <- c("APM", "BIS", "PS", "PC", "M", "C")
+intelligence <- c("APM", "BIS", "PS", "PC", "M", "C", "mean_rt", "sd_rt", "mean_acc")
 
 get_correlation <- function(data){
   cors = cor(data[, intelligence], data[, params], use = "pairwise.complete.obs")
