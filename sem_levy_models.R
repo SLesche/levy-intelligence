@@ -165,8 +165,8 @@ full_combined_model <- glue::glue(
   
   {true_g_factor}
   
-  g ~ v + alpha
-  # v ~~ alpha
+  g ~~ v + alpha
+  v ~~ alpha
   "
 )
 full_g <- sem(model = full_combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE)
