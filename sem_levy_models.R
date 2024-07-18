@@ -82,10 +82,10 @@ alpha_factor <- glue::glue("
   alpha_posner_ni ~~ p.alpha*alpha_posner_ni
   alpha_posner_pi ~~ p.alpha*alpha_posner_pi
 
-  sternberg =~ 1*alpha_sternberg_s1 + 1*alpha_sternberg_s3 + 1*alpha_sternberg_s5
-  # hick =~ 1*alpha_hick_0bit + 1*alpha_hick_1bit + 1*alpha_hick_2bit
+  sternberg =~ sload.alpha*alpha_sternberg_s1 + sload.alpha*alpha_sternberg_s3 + sload.alpha*alpha_sternberg_s5
+  # hick =~ hload.alpha*alpha_hick_0bit + hload.alpha*alpha_hick_1bit + hload.alpha*alpha_hick_2bit
 
-  posner =~ 1*alpha_posner_ni + 1*alpha_posner_pi
+  posner =~ hload.alpha*alpha_posner_ni + hload.alpha*alpha_posner_pi
 
   # hick ~~ 0*alpha
   posner ~~ 0*alpha
@@ -168,12 +168,12 @@ v_combined_model <- glue::glue(
 alpha_g <- sem(model = combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE)
 summary(alpha_g, fit.measures = TRUE, standardized = TRUE)
 
-# v_g <- sem(model = v_combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE)
-# summary(v_g, fit.measures = TRUE, standardized = TRUE)
-# 
-# full_g <- sem(model = full_combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE)
-# summary(full_g, fit.measures = TRUE, standardized = TRUE)
-# 
+v_g <- sem(model = v_combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE)
+summary(v_g, fit.measures = TRUE, standardized = TRUE)
+
+full_g <- sem(model = full_combined_model, data=data, std.ov =TRUE, estimator = "ML", orthogonal = TRUE)
+summary(full_g, fit.measures = TRUE, standardized = TRUE)
+
 # hist(model_results$alpha)
 # 
 # plot(model_results$alpha, model_results$v)
