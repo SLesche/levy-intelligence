@@ -183,7 +183,7 @@ corrplot::corrplot(cor_matrix, method="color", col=col(200),
 
 
 get_correlation <- function(data){
-  cors = cor(data[, intelligence], data[, params], use = "pairwise.complete.obs")
+  cors = cor(data[, c(intelligence, behav)], data[, params], use = "pairwise.complete.obs")
   return(cors)
 }
 
@@ -191,7 +191,7 @@ nested_data <- data %>%
   group_by(task, condition) %>% 
   nest() %>% 
   mutate(
-    cors = map(data, get_correlation)
+    cors = map(data, get_correlation),
   )
 
 results <- data.frame()
@@ -220,6 +220,7 @@ results <- results %>%
   )
 
 plot_by_measure <- results %>% 
+  # filter(measure %in% intelligence) %>% 
   ggplot(
     aes(
       x = param,
@@ -230,8 +231,6 @@ plot_by_measure <- results %>%
   facet_wrap(~measure)+
   geom_boxplot()+
   geom_hline(yintercept = 0, color = "red")+
-  theme_classic()+
-  theme(text=element_text(size=30),
-        axis.text = element_text(size=20))
-
-
+  theme_classic()
+  # theme(text=element_text(size=30),
+  #       axis.text = element_text(size=20))

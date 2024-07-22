@@ -119,7 +119,7 @@ r_citations <- cite_r(
 
 <!-- Here we can incorporate child markdown-documents as the separate parts -->
 # Introduction
-Intelligence is one of the most well researched constructs in psychology, playing a crucial role in predicting success in education, job performance, and overall well-being [ZIT]. Understanding the cognitive processes that underpin intelligence has been the focus of decades of research. One of the most robust findings in this area is the relationship between measures of mental speed and intelligence, with faster cognitive processing often associated with higher intelligence.
+Intelligence is one of the most well researched constructs in psychology, playing a crucial role in predicting success in education, job performance, and overall well-being. Understanding the cognitive processes that underpin intelligence has been the focus of decades of research. One of the most robust findings in this area is the relationship between measures of mental speed and intelligence, with faster cognitive processing often associated with higher intelligence.
 
 In a review of 172 studies, @sheppard2008intelligence reported an average correlation of $r = -.24$ between various mental speed measures and various intelligence measures. Most studies investigating the relationship between intelligence and mental speed use elementary cognitive tasks (ECTs) to obtain a measure of mental speed. ECTs are simple tasks with very low cognitive demands. For example, participants have to respond by key-press in which of two squares a stimulus has appeared. This limits the role of individual differences in strategy and allows researchers to obtain a pure measure of mental speed.
 
@@ -179,7 +179,45 @@ I excluded all response times which deviated more than 3 standard deviations fro
 ## Levy Flight Model estimation
 The inference net showed no sign of bias in posterior estimation (see Figure \@ref(fig:results-bf-bias)). It also displayed acceptable recovery of true generating parameters (see Figure \@ref(fig:results-bf-recovery)).
 
-(ref:results-bf-bias) Empirical Cumulative Density Functions of Rank Statistics
+## Relationship of alpha and g
+On a bivariate level, alpha displayed consistently negative correlations with all cognitive performance measures (see Figure \@ref(fig:results-bivariate-plot)). Averaged over tasks and conditions, alpha showed a correlation with performance in the APM of $r =$`r results %>% filter(measure == "APM", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` and $r =$`r results %>% filter(measure == "BIS", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` in the BIS.
+
+(ref:results-bivariate-plot) Bivariate Correlation between parameters and cognitive performance
+```{r results-bivariate-plot, fig.cap = paste("(ref:results-bivariate-plot)")}
+plot_by_measure
+```
+
+## SEM
+The model showed acceptable fit `r print_sem(alpha_g)` and can be seen in Figure \@ref(fig:results-sem-alpha). On a latent level _alpha_ and _g_ correlated to $r = -.35$. 
+
+(ref:results-sem-alpha) Structural equation model of the relationship between alpha and intelligence
+```{r results-sem-alpha, fig.cap = paste("(ref:results-sem-alpha)")}
+knitr::include_graphics(
+  "images/sem_alpha_plot.png"
+)
+```
+
+# Discussion
+In this work, I applied a Levy-Flight Model [@voss2019sequential] to data from three different tasks [@schubert2017general] in order to investigate the relationship between the stability parameter alpha and intelligence. Bivariate correlations between alpha and measures of mental speed were negative with an average correlation of $r =$`r results %>% filter(measure %in% c("APM", "C", "PS", "M", "P"), param == "alpha") %>% pull(cor) %>% fisher_cor_mean()`. Following @schubert2016trait, we also investigated these results using SEM to obtain a latent trait measure for alpha. The latent correlation between alpha and intelligence was $r = -.35$. 
+
+This negative correlation provides support for the efficient jumping hypothesis [@wieschen2020jumping]. More intelligent individuals display less stable evidence accumulation processes. This indicates that they make use of this instability in easy response time tasks in order to optimize speed and accuracy.
+
+These results stand in contrast to earlier findings showing a negative correlation between variance in the response times and intelligence [@doebler2016relationship]. More intelligent individuals display less variability. These differing results suggest that alpha is not a measure of variability, despite the intuitive similarity between variability and instability. Additionally, alpha shows stronger average correlations with mean response time $r =$ `r results %>% filter(measure == "mean_rt", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` than with the standard deviation of response time $r =$ `r results %>% filter(measure == "sd_rt", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()`. These correlations suggest that stability in the evidence accumulation process leads to higher average response times and slightly higher variability in the response times.
+
+Future research should focus on investigating more difficult response time tasks. The relationship between alpha and intelligence may change in tasks that require more higher-order processing. I expect that the functional benefits of instability in the evidence accumulation process are only present in simple tasks and will revert in more complex tasks [@wieschen2020jumping].
+
+Nonetheless, this work provides first insights into the functionality of stability in evidence accumulation processes. My results suggest that more intelligent individuals display less stability in order to improve the response time by allowing bigger jumps in evidence accumulation processes. Future work will focus on investigating this relationship in more complex tasks, where I expect the functionality of instability to decline.
+
+<!-- References -->
+\newpage
+
+# References
+::: {#refs custom-style="Bibliography"}
+:::
+
+# (APPENDIX) Appendix {-}
+
+(ref:results-bf-bias) Empirical cumulative density functions of rank statistics
 ```{r results-bf-bias, fig.cap = paste("(ref:results-bf-bias)")}
 knitr::include_graphics(
   "images/bias_plot.png"
@@ -193,43 +231,9 @@ knitr::include_graphics(
 )
 ```
 
-## Relationship of alpha and g
-On a bivariate level, alpha displayed consistently negative correlations with all cognitive performance measures (see Figure \@ref(fig:results-bivariate-plot)). Averaged over tasks and conditions, alpha showed a correlation with performance in the APM of $r =$`r results %>% filter(measure == "APM", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` and $r =$`r results %>% filter(measure == "BIS", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` in the BIS.
-
-(ref:results-bivariate-plot) Bivariate Correlation between parameters and cognitive performance
-```{r results-bivariate-plot, fig.cap = paste("(ref:results-bivariate-plot)")}
-plot_by_measure
-```
-
-## SEM
-The measurement model with method factors for all three tasks failed to fit. This full model always estimated the variance of one of the method factors to be negative. I therefore excluded one of the method factors from the model [@steyer1999latent] and only retained a factor for the Sternberg and Posner Task.
-
-The model showed acceptable fit `r print_sem(alpha_g)` and can be seen in Figure \@ref(fig:results-sem-alpha). On a latent level _alpha_ and _g_ correlated to $-0.44$. 
-
-(ref:results-sem-alpha) Structural equation model of the relationship between alpha and intelligence
-```{r results-sem-alpha, fig.cap = paste("(ref:results-sem-alpha)")}
+(ref:results-corr-matrix) Correlation matrix of behavioral data and model parameters. Task and condition labels are omitted to improve readability
+```{r results-corr-matrix, fig.cap = paste("(ref:results-corr-matrix)")}
 knitr::include_graphics(
-  "images/sem_alpha_plot.png"
+  "images/corplot.png"
 )
 ```
-
-# Discussion
-Low correlations, but negative direction. This would mean that... 
-
-We used the SEM to measure trait alpha across tasks, as recommended in @schubert2016trait. our findings support the notion that you should do that
-
-However, Need to extend this to more difficult tasks. (Sternberg may already be a difficult task)
-
-
-This is in contrast to the findings that less variable results are found in more intelligent individuals
-maybe in the ongoing variability discussion
-
-Limitations: Tasks, intelligence measures (BIS), but probably fine with APM latency, no "difficult" tasks
-
-<!-- References -->
-\newpage
-
-# References
-::: {#refs custom-style="Bibliography"}
-:::
-
