@@ -25,7 +25,7 @@ affiliation:
   # add a second id using this syntax
 
 authornote: |
-  Author Notes go here.
+  Code needed to replicate this work can be found at: https://github.com/SLesche/levy-intelligence.
 
 # abstract: |
 #   One or two sentences providing a **basic introduction** to the field,  comprehensible to a scientist in any discipline.
@@ -136,7 +136,7 @@ In both the simple and full DDM, the drift rate is an average rate of evidence a
 
 Under the assumption that noise is normally distributed, large jumps in accumulated evidence become very unlikely. Recently, @voss2019sequential introduced an extension of the DDM that modifies the noise distribution. Here, the normal distribution is replaced by a heavy tailed distribution. This increases the likelihood of larger jumps occurring in the evidence accumulation process. The Cauchy distribution is an example of such a heavy-tailed distribution. Both the Cauchy distribution and the normal distribution are specific instances of the family of so-called Levy alpha-stable distributions. Within this family, a stability parameter $\alpha$ governs the heaviness in the tails of the distribution. $\alpha$ = 2 results in the normal distribution, $\alpha$ = 1 results in the Cauchy distribution. In the Levy-flight model, $\alpha$ is an additional parameter that can be estimated from the data [@voss2019sequential; @wieschen2020jumping]. 
 
-Higher values of $\alpha$ lead to more stable evidence accumulation with fewer jumps. Lower values of $alpha$ lead to less stable evidence accumulation, showing more extreme jumps. In behavioral data, higher variability of response times is associated with lower intelligence [@doebler2016relationship]. Intelligent individuals are more "stable" in their response times. Following these findings, higher values of alpha may be positively associated with intelligence. @wieschen2020jumping refers to this as the "inefficient jumping" hypothesis. The jumps in evidence accumulation more common in heavy-tailed noise distributions are deemed inefficient while completing the response time task. Intelligent individuals should therefore display fewer inefficient jumps and thus have higher values of $\alpha$.
+Higher values of $\alpha$ lead to more stable evidence accumulation with fewer jumps. Lower values of $alpha$ lead to less stable evidence accumulation, showing more extreme jumps. In behavioral data, higher variability of response times is associated with lower intelligence [@doebler2016relationship]. Intelligent individuals are more "stable" in their response times. Following these findings, higher values of $\alpha$ may be positively associated with intelligence. @wieschen2020jumping refers to this as the "inefficient jumping" hypothesis. The jumps in evidence accumulation more common in heavy-tailed noise distributions are deemed inefficient while completing the response time task. Intelligent individuals should therefore display fewer inefficient jumps and thus have higher values of $\alpha$.
 
 Contrasting this, jumps in evidence accumulation may also be beneficial. In simple response time tasks with high accuracy, erratically accumulating information may be an efficient way to decrease response times. This is termed the "efficient jumping" hypothesis [@wieschen2020jumping]. The efficient jumping hypothesis claims that more intelligent individuals make use of larger jumps in evidence accumulation to complete the task more quickly. They should therefore display lower values of $\alpha$.
 
@@ -169,18 +169,18 @@ $$\alpha \sim Beta(4, 2) \cdot 2$$
 I simulated 200,000 datasets and then trained the model for 150 epochs. After training, I investigated the computational faithfulness of the neural network by using simulation-based calibration [@talts2018validating]. I investigated the bias of the posterior distributions after applying the amortized inference network on newly simulated data. Furthermore, I investigated the ability of the model to recover true generating parameters by comparing the recovered posterior means to the true parameters used in simulation.
 
 ### Structural Equation Model
-I used structural equation modelling to evaluate the correlation between a latent first order factor of the alpha parameter over all tasks and a _g_ factor over all intelligence measures. In addition to the first order factor over all tasks and conditions, I included task-specific method factors. Intelligence was defined as a first order factor over all sub-tests of the BIS as well as the APM. I then investigated the relationship between the latent factors _alpha_ and _g_.
+I used structural equation modelling to evaluate the correlation between a latent first order factor of the $\alpha$ parameter over all tasks and a _g_ factor over all intelligence measures. In addition to the first order factor over all tasks and conditions, I included task-specific method factors. Intelligence was defined as a first order factor over all sub-tests of the BIS as well as the APM. I then investigated the relationship between the latent factors $\alpha$ and _g_.
 
 # Results
-Model estimation was done in Python 3.11 with Bayesflow version 1.1.6 [@radev2020bayesflow]. Data analysis was done in `r r_citations$r`. `r r_citations$pkgs`
+Model estimation was done in Python 3.11 with Bayesflow version 1.1.6 [@radev2020bayesflow]. Data preparation and analysis was completed in `r r_citations$r`. `r r_citations$pkgs`
 
 I excluded all response times which deviated more than 3 standard deviations from the mean response time for a given participant in a given condition. This removed `r round(hick_data_removed*100, 2)` % of the data in the Hick task, `r round(posner_data_removed*100, 2)` % of the data in the Posner task, and `r round(sternberg_data_removed*100, 2)` % of the data in the Sternberg task. No further data-pruning was applied.
 
 ## Levy Flight Model estimation
 The inference net showed no sign of bias in posterior estimation (see Figure \@ref(fig:results-bf-bias)). It also displayed acceptable recovery of true generating parameters (see Figure \@ref(fig:results-bf-recovery)).
 
-## Relationship of alpha and g
-On a bivariate level, alpha displayed consistently negative correlations with all cognitive performance measures (see Figure \@ref(fig:results-bivariate-plot)). Averaged over tasks and conditions, alpha showed a correlation with performance in the APM of $r =$`r results %>% filter(measure == "APM", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` and $r =$`r results %>% filter(measure == "BIS", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` in the BIS.
+## Relationship of $\alpha$ and g
+On a bivariate level, $\alpha$ displayed consistently negative correlations with all cognitive performance measures (see Figure \@ref(fig:results-bivariate-plot)). Averaged over tasks and conditions, $\alpha$ showed a correlation with performance in the APM of $r =$`r results %>% filter(measure == "APM", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` and $r =$`r results %>% filter(measure == "BIS", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` in the BIS.
 
 (ref:results-bivariate-plot) Bivariate Correlation between parameters and cognitive performance
 ```{r results-bivariate-plot, fig.cap = paste("(ref:results-bivariate-plot)")}
@@ -188,9 +188,9 @@ plot_by_measure
 ```
 
 ## SEM
-The model showed acceptable fit `r print_sem(alpha_g)` and can be seen in Figure \@ref(fig:results-sem-alpha). On a latent level _alpha_ and _g_ correlated to $r = -.35$. 
+The model showed acceptable fit `r print_sem(alpha_g)` and can be seen in Figure \@ref(fig:results-sem-alpha). On a latent level $\alpha$ and _g_ correlated to $r = -.35$. 
 
-(ref:results-sem-alpha) Structural equation model of the relationship between alpha and intelligence
+(ref:results-sem-alpha) Structural equation model of the relationship between $\alpha$ and intelligence
 ```{r results-sem-alpha, fig.cap = paste("(ref:results-sem-alpha)")}
 knitr::include_graphics(
   "images/sem_alpha_plot.png"
@@ -198,13 +198,13 @@ knitr::include_graphics(
 ```
 
 # Discussion
-In this work, I applied a Levy-Flight Model [@voss2019sequential] to data from three different tasks [@schubert2017general] in order to investigate the relationship between the stability parameter alpha and intelligence. Bivariate correlations between alpha and measures of mental speed were negative with an average correlation of $r =$`r results %>% filter(measure %in% c("APM", "C", "PS", "M", "P"), param == "alpha") %>% pull(cor) %>% fisher_cor_mean()`. Following @schubert2016trait, we also investigated these results using SEM to obtain a latent trait measure for alpha. The latent correlation between alpha and intelligence was $r = -.35$. 
+In this work, I applied a Levy-Flight Model [@voss2019sequential] to data from three different tasks [@schubert2017general] in order to investigate the relationship between the stability parameter $\alpha$ and intelligence. Bivariate correlations between $\alpha$ and measures of mental speed were negative with an average correlation of $r =$`r results %>% filter(measure %in% c("APM", "C", "PS", "M", "P"), param == "alpha") %>% pull(cor) %>% fisher_cor_mean()`. Following @schubert2016trait, we also investigated these results using SEM to obtain a latent trait measure for $\alpha$. The latent correlation between $\alpha$ and intelligence was $r = -.35$. 
 
 This negative correlation provides support for the efficient jumping hypothesis [@wieschen2020jumping]. More intelligent individuals display less stable evidence accumulation processes. This indicates that they make use of this instability in easy response time tasks in order to optimize speed and accuracy.
 
-These results stand in contrast to earlier findings showing a negative correlation between variance in the response times and intelligence [@doebler2016relationship]. More intelligent individuals display less variability. These differing results suggest that alpha is not a measure of variability, despite the intuitive similarity between variability and instability. Additionally, alpha shows stronger average correlations with mean response time $r =$ `r results %>% filter(measure == "mean_rt", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` than with the standard deviation of response time $r =$ `r results %>% filter(measure == "sd_rt", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()`. These correlations suggest that stability in the evidence accumulation process leads to higher average response times and slightly higher variability in the response times.
+These results stand in contrast to earlier findings showing a negative correlation between variance in the response times and intelligence [@doebler2016relationship]. More intelligent individuals display less variability. These differing results suggest that $\alpha$ is not a measure of variability, despite the intuitive similarity between variability and instability. Additionally, $\alpha$ shows stronger average correlations with mean response time $r =$ `r results %>% filter(measure == "mean_rt", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()` than with the standard deviation of response time $r =$ `r results %>% filter(measure == "sd_rt", param == "alpha") %>% pull(cor) %>% fisher_cor_mean()`. These correlations suggest that stability in the evidence accumulation process leads to higher average response times and slightly higher variability in the response times.
 
-Future research should focus on investigating more difficult response time tasks. The relationship between alpha and intelligence may change in tasks that require more higher-order processing. I expect that the functional benefits of instability in the evidence accumulation process are only present in simple tasks and will revert in more complex tasks [@wieschen2020jumping].
+Future research should focus on investigating more difficult response time tasks. The relationship between $\alpha$ and intelligence may change in tasks that require more higher-order processing. I expect that the functional benefits of instability in the evidence accumulation process are only present in simple tasks and will revert in more complex tasks [@wieschen2020jumping].
 
 Nonetheless, this work provides first insights into the functionality of stability in evidence accumulation processes. My results suggest that more intelligent individuals display less stability in order to improve the response time by allowing bigger jumps in evidence accumulation processes. Future work will focus on investigating this relationship in more complex tasks, where I expect the functionality of instability to decline.
 
